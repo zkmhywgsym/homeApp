@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_image_blue"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/line_title"
+        layout="@layout/frame_title_layout"
+        android:padding="10dp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/image_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/login_default_head" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdge="none"
+        android:scrollbars="none" >
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp" >
+
+            <TableRow
+                android:id="@+id/line_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp" >
+
+                <EditText
+                    android:id="@+id/contacts_value"
+                    style="@style/LoginEditStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_editview_corners_grey"
+                    android:drawableLeft="@drawable/login_user_name"
+                    android:hint="请输入手机号"
+                    android:inputType="number"
+                    android:minHeight="@dimen/login_height"
+                    android:minWidth="@dimen/login_width"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="13dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/line_check_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <EditText
+                        android:id="@+id/check_code_value"
+                        style="@style/LoginEditStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:background="@drawable/app_editview_corners_grey"
+                        android:drawableLeft="@drawable/login_user_name"
+                        android:hint="请输入校验码"
+                        android:inputType="number"
+                        android:minHeight="@dimen/login_height"
+                        android:minWidth="@dimen/login_width"
+                        android:paddingBottom="13dp"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="13dp"
+                        android:selectAllOnFocus="true" />
+
+                    <Button
+                        android:id="@+id/check_code_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1.3"
+                        android:background="@drawable/app_editview_corners_grey"
+                        android:singleLine="true"
+                        android:text="获取"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/line_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp" >
+
+                <EditText
+                    android:id="@+id/user_pwd_value"
+                    style="@style/LoginEditStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_editview_corners_grey"
+                    android:drawableLeft="@drawable/login_pwd"
+                    android:hint="请输入密码"
+                    android:inputType="textPassword"
+                    android:minHeight="@dimen/login_height"
+                    android:minWidth="@dimen/login_width"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="13dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/line_pwd_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp" >
+
+                <EditText
+                    android:id="@+id/user_pwd_value2"
+                    style="@style/LoginEditStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/app_editview_corners_grey"
+                    android:drawableLeft="@drawable/login_pwd"
+                    android:hint="请确认密码"
+                    android:inputType="textPassword"
+                    android:minHeight="@dimen/login_height"
+                    android:minWidth="@dimen/login_width"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="13dp" />
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/app_button_corners_lilght_green"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="10dp"
+                    android:text="注册" />
+            </LinearLayout>
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

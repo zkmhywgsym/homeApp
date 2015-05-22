@@ -1,0 +1,265 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="IC卡号："
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/ic_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="IC卡号"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="单号："
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/cardId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="单号"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="车牌号："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/car_num"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="车牌号"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="客户："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="姓名"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="物料名称："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/mat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="物料"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="过磅时间："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/weigh_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="过磅时间"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="手持号："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/phone_owner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="手持"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="装货人："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/operator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="装货人"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="装货时间："
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/optTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:hint="装货时间"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:padding="20dp"
+        android:layout_height="wrap_content" >
+
+        <View android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/tag"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/conform"
+            android:layout_toLeftOf="@id/tag"
+            android:layout_toStartOf="@id/tag"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_image_blue"
+            android:text="修改" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_toRightOf="@id/tag"
+            android:layout_toEndOf="@id/tag"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_image_blue"
+            android:text="下一步" />
+    </RelativeLayout>
+
+</LinearLayout>

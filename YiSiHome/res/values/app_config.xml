@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 更新 -->
+    <dimen name="updateViewLayout">250dip</dimen>
+    <!-- 左菜单宽 -->
+    <dimen name="navdrawer_width">100dp</dimen>
+    <!-- 左侧菜单背景颜色 -->
+    <color name="leftMenuBG">#cccccc</color>
+    <!-- 左侧菜单字体颜色 -->
+    <color name="item_main_left_menu">#000000</color>
+    <!-- 左侧菜单选项高 -->
+    <dimen name="list_item_height">28dp</dimen>
+    <!-- 滚轮 -->
+    <string name="condition_time_hint">请选择时间</string>
+    <!-- 菜单选项 -->
+    <string-array name="main_left_menu">
+        <item >首页</item>
+        <item >系统</item>
+        <item >帮助</item>
+        <item >关于</item>
+        <item ></item>
+    </string-array>
+</resources>

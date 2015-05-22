@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffefebe7" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:layout_marginBottom="5dp"
+            android:background="#ffefebe7"
+            android:orientation="horizontal"
+            android:padding="10dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="反馈类型："
+                android:textColor="#ff888888"
+                android:textSize="16.0sp" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/ideaSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="功能建议"
+            android:background="@drawable/ic_more_item_pressed"
+            android:textColor="#929997" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="#ffefebe7"
+                android:orientation="horizontal"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="意见或建议"
+                    android:textColor="#ff888888"
+                    android:textSize="16.0sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/problem"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/app_more_item_press"
+                android:gravity="top"
+                android:hint="|您可以在这里输入您的宝贵意见，以便于体验更好的应用"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:padding="5dp"
+                android:textColor="#99bb99" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="#ffefebe7"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="联系方式"
+                    android:textColor="#ff888888"
+                    android:textSize="16.0sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/contacts"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/app_more_item_press"
+                android:gravity="top"
+                android:hint="|您可以在这里输入您的联系方式"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:textColor="#99bb99" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.03" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:background="@drawable/app_feed_back_submitbutton"
+                android:text="提 交" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ani"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/ani_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@anim/app_feed_back_dance" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="反馈中..."
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</FrameLayout>

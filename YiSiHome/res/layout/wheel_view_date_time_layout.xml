@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/date_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/main_color_blue"
+    android:orientation="vertical"
+    android:padding="12dp" >
+	<TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10.0dip"
+        android:singleLine="true"
+        android:text="@string/condition_time_hint"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="12dp" >
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/year"
+            android:layout_width="60dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/month"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/day"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content" />
+        <kankan.wheel.widget.WheelView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/hour"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content" />
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/mins"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content" />
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/second"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="15.0dip"
+            android:background="@drawable/app_wv_big_button_x"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#ff000000"
+            android:textSize="20.0sp" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.0dip"
+            android:layout_marginTop="15.0dip"
+            android:background="@drawable/app_wv_big_button_x"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#ff000000"
+            android:textSize="20.0sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>

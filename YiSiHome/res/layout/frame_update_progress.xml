@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="@dimen/updateViewLayout"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_image_blue"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dip"
+            android:text="更新进度"
+            android:textColor="@android:color/white"
+            android:textSize="20dip" >
+        </TextView>
+
+        <RelativeLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="@dimen/updateViewLayout"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:background="#D0D0D0"
+            android:padding="5dp" >
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_layout"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <Button
+                android:id="@+id/undownload"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dip"
+                android:background="@drawable/app_button_corners_lilght_green"
+                android:gravity="center"
+                android:text="取消" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

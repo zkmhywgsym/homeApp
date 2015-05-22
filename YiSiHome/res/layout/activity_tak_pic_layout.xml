@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/tak_pic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="@drawable/main_image_blue"
+            android:layout_height="wrap_content"
+            android:text="拍照" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_margin="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/main_image_blue"
+            android:layout_height="wrap_content"
+            android:text="保存" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_margin="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/main_image_blue"
+            android:layout_height="wrap_content"
+            android:text="下一步" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:id="@+id/display"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@color/main_color_blue"
+            android:scaleType="centerCrop"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>
