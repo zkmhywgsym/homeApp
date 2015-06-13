@@ -51,6 +51,24 @@ public class UpdateFragment extends BaseFragment {
 		this.context = context;
 	}
 
+	public void update() {// 更新接口
+
+		updateAlert = new Builder(context).create();
+		final int update = 0x56;
+		final int noupdate = 0x58;
+		YisiApp.showProgressDialog(context, null, "正在获取新版本信息,请稍候...");
+		new Thread() {
+			@Override
+			public void run() {
+				if (check()) {// no update
+					handler.obtainMessage(update).sendToTarget();
+				} else if (noUpdate) {
+					handler.obtainMessage(noupdate).sendToTarget();
+				}
+				super.run();
+			}
+		}.start();
+	}
 	/**
 	 * 执行更新
 	 */
@@ -81,6 +99,7 @@ public class UpdateFragment extends BaseFragment {
 		try {
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("verCode", localVersion));
+			params.add(new BasicNameValuePair("appName", localVersion));
 			version = helper.getObject(url, params);
 		} catch (Exception e) {
 		}
@@ -189,25 +208,6 @@ public class UpdateFragment extends BaseFragment {
 			super.handleMessage(msg);
 		}
 	};
-
-	public void update() {// 更新接口
-
-		updateAlert = new Builder(context).create();
-		final int update = 0x56;
-		final int noupdate = 0x58;
-		YisiApp.showProgressDialog(context, null, "正在获取新版本信息,请稍候...");
-		new Thread() {
-			@Override
-			public void run() {
-				if (check()) {// no update
-					handler.obtainMessage(update).sendToTarget();
-				} else if (noUpdate) {
-					handler.obtainMessage(noupdate).sendToTarget();
-				}
-				super.run();
-			}
-		}.start();
-	}
 
 	private Dialog showDialog(InitView callBack) {// 显示弹出层
 	// AlertDialog dialog = new Builder(context).create();

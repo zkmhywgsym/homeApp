@@ -72,9 +72,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- 百度地图权限 -->
+    <!-- SMSSDK -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <!-- SMSSDK -->
     <application
         android:name="com.yisi.yisiHome.baseActivity.YisiApp"
         android:allowBackup="true"
+        android:windowSoftInputMode="adjustPan"
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >

@@ -4,10 +4,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 
 public class FileUtils {
+private Context context;
+	
+	public FileUtils(Context context) {
+		super();
+		this.context = context;
+	}
 	public Bitmap getBitmap(String path){
 		Bitmap bitmap=null;
 		try {
@@ -33,5 +43,19 @@ public class FileUtils {
 			return "";
 		}
 		
+	}
+	public void playSound(int rawRid){
+
+		SoundPool soundPool= new SoundPool(10,AudioManager.STREAM_SYSTEM,5);
+
+		soundPool.load(context,rawRid,1);
+		soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+			
+			@Override
+			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+				soundPool.play(1,0.1f, 0.1f, 0, 0, 1);
+			}
+		});
+
 	}
 }

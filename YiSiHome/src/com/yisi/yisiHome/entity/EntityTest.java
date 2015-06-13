@@ -2,7 +2,7 @@ package com.yisi.yisiHome.entity;
 
 import java.io.Serializable;
 
-import com.hyq.dbUtils.Id;
+import com.lidroid.xutils.db.annotation.Id;
 
 @SuppressWarnings("serial")
 public class EntityTest implements Serializable{

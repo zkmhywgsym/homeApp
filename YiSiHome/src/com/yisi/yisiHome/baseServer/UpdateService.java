@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 
 import com.yisi.yisiHome.R;
 import com.yisi.yisiHome.baseEntity.EntityVersion;
+import com.yisi.yisiHome.utils.Constants;
 
 
 public class UpdateService {
@@ -98,10 +99,11 @@ public class UpdateService {
 	}) ;
 
 	private InputStream getInputStream() {
-		updateurl = version.getApkUrl();
+		updateurl = Constants.URL+version.getApkUrl();
 		try {
 			URL url = new URL(updateurl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Accept-Encoding", "identity"); 
 			conn.connect();
 			contentLength = conn.getContentLength();
 			return conn.getInputStream();

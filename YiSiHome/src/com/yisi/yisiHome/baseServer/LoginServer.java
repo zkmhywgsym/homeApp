@@ -25,6 +25,7 @@ import com.yisi.yisiHome.utils.AESHelper;
 import com.yisi.yisiHome.utils.AndroidUtils;
 import com.yisi.yisiHome.utils.Constants;
 import com.yisi.yisiHome.utils.DialogUtils;
+import com.yisi.yisiHome.utils.MD5Utils;
 import com.yisi.yisiHome.utils.SMSUtils;
 import com.yisi.yisiHome.utils.WebHelper;
 import com.yisi.yisiHome.utils.DialogUtils.InitView;
@@ -52,8 +53,8 @@ public class LoginServer {
 		if ((TextUtils.isEmpty(name)) || (TextUtils.isEmpty(pwd))) {
 			return;
 		}
-		pwd = AESHelper.encrypt(pwd);
-		if (loginLocal(name, pwd)) {
+		String pwdMd5 = MD5Utils.Md5(pwd);
+		if (loginLocal(name, pwdMd5)) {
 			loginSuccess(name,pwd,remember,auto);
 			return;
 		}
@@ -84,13 +85,13 @@ public class LoginServer {
 								.setOnClickListener(new MyClick());
 						confirmBtn.setOnClickListener(new MyClick());
 						confirmBtn.setText("注册用户");
-						SMSUtils.getSMSmsg(activity, checkCode);
+//						SMSUtils.getSMSmsg(activity, checkCode);
 						contacts.setText(AndroidUtils.getPhoneNum(activity));
 						contacts.setEnabled(true);
 						pwd.setEnabled(true);
-						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-						pwdConfirm
-								.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//						pwdConfirm
+//								.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 					}
 				});
 	}
@@ -112,16 +113,16 @@ public class LoginServer {
 						pwdConfirm = ((EditText) win
 								.findViewById(R.id.user_pwd_value2));
 						contacts = ((EditText) win
-								.findViewById(R.id.contacts_value));
+								.findViewById(R.id.login_name_value));
 						Button confirmBtn = (Button) win
 								.findViewById(R.id.confirm_button);
 						win.findViewById(R.id.check_code_button)
 								.setOnClickListener(new MyClick());
 						confirmBtn.setOnClickListener(new MyClick());
-						SMSUtils.getSMSmsg(activity, checkCode);
+//						SMSUtils.getSMSmsg(activity, checkCode);
 						confirmBtn.setText("确认重置");
 						pwd.setEnabled(true);
-						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 						contacts.setEnabled(true);
 						contacts.setText(AndroidUtils.getPhoneNum(activity));
 					}
@@ -129,6 +130,46 @@ public class LoginServer {
 	}
 
 	// /*************************************************************
+	private void toRegist() {
+		final String deviceId=AndroidUtils
+				.getDeviceId(activity);
+		new AsyncTask<Void, Void, String>() {
+			protected void onPreExecute() {
+				YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
+				super.onPreExecute();
+			}
+
+			protected String doInBackground(Void... ps) {
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("loginName", contacts
+						.getText().toString()));
+				params.add(new BasicNameValuePair("loginPwd", MD5Utils
+						.Md5(pwd.getText().toString())));
+//				params.add(new BasicNameValuePair("device", deviceId));
+				return new WebHelper().getResult(Constants.URL_REGISTER_USER,
+						params);
+			}
+
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				YisiApp.disMissProgressDialog();
+				if (result!=null&&result.contains("true")) {
+					YisiApp.tell(activity, "注册成功");
+					flag = -1;
+					if (dialog != null) {
+						dialog.dismiss();
+						dialog = null;
+					}
+				} else if (result!=null&&result.contains("exists")) {
+					YisiApp.tell(activity, "注册名已存在");
+					contacts.requestFocus();
+				} else {
+					YisiApp.tell(activity, "注册失败");
+				}
+			}
+
+		}.execute();
+	}
 	private void toResetPwd() {
 		new AsyncTask<Void, Void, String>() {
 
@@ -136,9 +177,9 @@ public class LoginServer {
 			protected String doInBackground(Void... params) {
 				WebHelper webHelper = new WebHelper(String.class);
 				List<NameValuePair> ps = new ArrayList<NameValuePair>();
-				ps.add(new BasicNameValuePair("password", AESHelper.encrypt(pwd
+				ps.add(new BasicNameValuePair("loginPwd", MD5Utils.Md5(pwd
 						.getText().toString())));
-				ps.add(new BasicNameValuePair("mobilePhone", contacts.getText()
+				ps.add(new BasicNameValuePair("loginName", contacts.getText()
 						.toString()));
 				return webHelper.getResult(Constants.URL_RESET, ps);
 			}
@@ -146,7 +187,8 @@ public class LoginServer {
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
 				YisiApp.disMissProgressDialog();
-				if ((result != null) && ("true".equals(result))) {
+				if (result != null && result.contains("true")) {
+					flag = -1;
 					YisiApp.tell(activity, "重置成功");
 					if (dialog != null) {
 						dialog.dismiss();
@@ -178,11 +220,7 @@ public class LoginServer {
 					.toString(), new EventHandler() {
 				public void afterEvent(int event, final int result,
 						final Object data) {
-					activity.runOnUiThread(new Runnable() {
-						public void run() {
-							getSMSCodeSuccess(result, data);
-						}
-					});
+					getSMSCodeSuccess(result, data);
 					SMSSDK.unregisterAllEventHandler();
 					super.afterEvent(event, result, data);
 				}
@@ -214,7 +252,7 @@ public class LoginServer {
 
 	private void loginSuccess(String name, String pwd, boolean remember,
 			boolean auto) {
-		saveValue(name, pwd, remember, auto);
+		saveValue(name, AESHelper.encrypt(pwd), remember, auto);
 		Intent intent = new Intent(activity, MainActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		activity.startActivity(intent);
@@ -223,6 +261,7 @@ public class LoginServer {
 
 	private void loginWeb(final String user, final String pwd,
 			final boolean remember, final boolean auto) {
+		final String pwdMd5 = MD5Utils.Md5(pwd);
 		new AsyncTask<Void, Void, String>() {
 			protected void onPreExecute() {
 				YisiApp.showProgressDialog(activity, "登陆中……", "正在登陆中，请稍候……");
@@ -232,7 +271,7 @@ public class LoginServer {
 			protected String doInBackground(Void... ps) {
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("loginName", user));
-				params.add(new BasicNameValuePair("loginPwd", pwd));
+				params.add(new BasicNameValuePair("loginPwd", pwdMd5));
 				return new WebHelper().getResult(Constants.URL_LOGIN, params);
 			}
 
@@ -243,8 +282,9 @@ public class LoginServer {
 					YisiApp.tell(activity, "连接失败");
 				} else {
 
-					if (result.contains("success"))
+					if (result.contains("success")){
 						loginSuccess(user, pwd, remember, auto);
+					}
 					else if (result.contains("other")) {
 						YisiApp.tell(activity, "未知错误");
 					} else {
@@ -283,7 +323,6 @@ public class LoginServer {
 								YisiApp.disMissProgressDialog();
 								if (result == SMSSDK.RESULT_COMPLETE) {
 									activity.runOnUiThread(callBack);
-									SMSSDK.unregisterAllEventHandler();
 								} else {
 									YisiApp.tell(activity, "验证码无效");
 								}
@@ -297,44 +336,6 @@ public class LoginServer {
 		}
 	}
 
-	private void toRegist() {
-		new AsyncTask<Void, Void, String>() {
-			protected void onPreExecute() {
-				YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
-				super.onPreExecute();
-			}
-
-			protected String doInBackground(Void... ps) {
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("mobilePhone", contacts
-						.getText().toString()));
-				params.add(new BasicNameValuePair("password", AESHelper
-						.encrypt(pwd.getText().toString())));
-				params.add(new BasicNameValuePair("device", AndroidUtils
-						.getDeviceId(activity)));
-				return new WebHelper().getResult(Constants.URL_REGISTER_USER,
-						params);
-			}
-
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				YisiApp.disMissProgressDialog();
-				if ("true".equals(result)) {
-					YisiApp.tell(activity, "注册成功");
-					if (dialog != null) {
-						dialog.dismiss();
-						dialog = null;
-					}
-				} else if ("exists".equals(result)) {
-					YisiApp.tell(activity, "注册名已存在");
-					contacts.requestFocus();
-				} else {
-					YisiApp.tell(activity, "注册失败");
-				}
-			}
-
-		}.execute();
-	}
 
 	// 检测非空
 	private boolean checkInfo(EditText... evs) {
@@ -377,7 +378,6 @@ public class LoginServer {
 					};
 				}
 				submitVerifyCode(callBack);
-				flag = -1;
 				break;
 			default:
 				break;

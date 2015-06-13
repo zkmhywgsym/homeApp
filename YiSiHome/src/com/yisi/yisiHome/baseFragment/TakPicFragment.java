@@ -42,7 +42,7 @@ public class TakPicFragment extends BaseFragment implements OnClickListener{
 		if (!TextUtils.isEmpty(icJson)) {
 			ic=JSON.parseObject(icJson,EntityICCard.class);
 			if (ic!=null&&!TextUtils.isEmpty(ic.getImageName())) {
-				pic.setImageBitmap(new FileUtils().getBitmap(ic.getImageName()));
+				pic.setImageBitmap(new FileUtils(mainActivity).getBitmap(ic.getImageName()));
 			}
 		}
 		return rootView;

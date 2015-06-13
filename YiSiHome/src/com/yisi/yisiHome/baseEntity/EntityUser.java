@@ -2,8 +2,7 @@ package com.yisi.yisiHome.baseEntity;
 
 import java.io.Serializable;
 
-import com.hyq.dbUtils.Id;
-import com.hyq.dbUtils.Operator;
+import com.lidroid.xutils.db.annotation.Id;
 
 @SuppressWarnings("serial")
 public class EntityUser implements Serializable{
@@ -12,7 +11,6 @@ public class EntityUser implements Serializable{
 	private String name;
 	private String pwd;
 	private long timestamp;
-	@Operator
 	private int type;//0 add or update;1 del
 	
 	public EntityUser() {}

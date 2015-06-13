@@ -88,21 +88,32 @@ public class YisiApp extends Application {
 		}
 	}
 
+	public static boolean isProgressDialogShowing(){
+		return progress!=null&&progress.isShowing();
+	}
 	public static void showProgressDialog(Context context, String title,
 			String msg) {
-		disMissProgressDialog();
-		progress = new ProgressDialog(context);
-		progress.setTitle(title);
-		progress.setMessage(msg);
-		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progress.setCancelable(false);
-		progress.show();
+		try {
+			disMissProgressDialog();
+			progress = new ProgressDialog(context);
+			progress.setTitle(title);
+			progress.setMessage(msg);
+			progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progress.setCancelable(false);
+			progress.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void disMissProgressDialog() {
-		if (progress != null && progress.isShowing()) {
-			progress.dismiss();
-			progress = null;
+		try {
+			if (progress != null && progress.isShowing()) {
+				progress.dismiss();
+				progress = null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

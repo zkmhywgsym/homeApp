@@ -2,12 +2,10 @@ package com.yisi.yisiHome.entity;
 
 import java.io.Serializable;
 
-import com.hyq.dbUtils.Id;
+import com.yisi.yisiHome.baseEntity.DBBaseEntitiy;
 
 @SuppressWarnings("serial")
-public class EntityICCard implements Serializable{
-	@Id
-	private int id;
+public class EntityICCard extends DBBaseEntitiy implements Serializable{
 	private String cardId;//卡号
 	private String orderId;//单号
 	private String custom;//客户
@@ -30,7 +28,6 @@ public class EntityICCard implements Serializable{
 			String material, long operateTime, String imageName,
 			double longitude, double latitude) {
 		super();
-		this.id = id;
 		this.cardId = cardId;
 		this.orderId = orderId;
 		this.custom = custom;
@@ -45,13 +42,6 @@ public class EntityICCard implements Serializable{
 		this.latitude = latitude;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getCardId() {
 		return cardId;
@@ -151,12 +141,12 @@ public class EntityICCard implements Serializable{
 
 	@Override
 	public String toString() {
-		return "EntityICCard [id=" + id + ", cardId=" + cardId + ", orderId="
-				+ orderId + ", custom=" + custom + ", carNum=" + carNum
-				+ ", weightTime=" + weightTime + ", phoneNum=" + phoneNum
-				+ ", operator=" + operator + ", material=" + material
-				+ ", operateTime=" + operateTime + ", imageName=" + imageName
-				+ ", longitude=" + longitude + ", latitude=" + latitude + "]";
+		return "EntityICCard [cardId=" + cardId + ", orderId=" + orderId
+				+ ", custom=" + custom + ", carNum=" + carNum + ", weightTime="
+				+ weightTime + ", phoneNum=" + phoneNum + ", operator="
+				+ operator + ", material=" + material + ", operateTime="
+				+ operateTime + ", imageName=" + imageName + ", longitude="
+				+ longitude + ", latitude=" + latitude + "]";
 	}
 
 	

@@ -9,24 +9,31 @@ import org.apache.http.message.BasicNameValuePair;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
-import com.hyq.dbUtils.DBManager;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.yisi.yisiHome.baseEntity.DBTimeStamp;
 import com.yisi.yisiHome.baseEntity.EntityUser;
 import com.yisi.yisiHome.utils.Constants;
 import com.yisi.yisiHome.utils.MD5Utils;
 import com.yisi.yisiHome.utils.WebHelper;
 
 public class UserServer {
-	private DBManager<EntityUser> dbm;
+	private DbUtils dbu;
 	WebHelper<EntityUser> webHelper=new WebHelper<EntityUser>(EntityUser.class);
 
 	public UserServer(Context context) {
 		super();
-		dbm=new DBManager<EntityUser>(context, EntityUser.class);
+		dbu=DbUtils.create(context);
 	}
 	public boolean checkUser(EntityUser user){
 		EntityUser u=new EntityUser();
-		u.setName(user.getName());
-		ArrayList<EntityUser> result=dbm.queryWhere(u);
+		List<EntityUser> result=new ArrayList<EntityUser>();
+		try {
+			result = dbu.findAll(Selector.from(EntityUser.class).where("name", "=", user.getName()));
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
 		if (result.size()==0) {
 			//TODO 联网登陆
 			return false;
@@ -38,7 +45,7 @@ public class UserServer {
 		try {
 			for (EntityUser entityUser : entityUsers) {
 				entityUser.setPwd(MD5Utils.Md5(entityUser.getPwd()));
-				dbm.insert(entityUser);
+				dbu.saveOrUpdate(entityUser);
 			}
 			return true;
 		} catch (Exception e) {
@@ -54,11 +61,11 @@ public class UserServer {
 			List<EntityUser> users=webHelper.getArray(Constants.URL_UPDATE_USER, params);
 			for (EntityUser entityUser : users) {
 				if(Constants.ADD_OR_UPDATE==entityUser.getType()){
-					dbm.insert(entityUser);
+					dbu.saveOrUpdate(entityUser);
 				}else if(Constants.DELETE==entityUser.getType()){
 					entityUser.setId(0);
 					entityUser.setPwd("");
-					dbm.delete(entityUser);
+					dbu.delete(entityUser);
 				}
 			}
 			return true;
@@ -69,7 +76,8 @@ public class UserServer {
 	}
 	private long getTimestamp(){
 		try {
-			return dbm.query(new StringBuilder(" order by timestamp")).get(0).getTimestamp();
+			DBTimeStamp dbt=dbu.findFirst(Selector.from(DBTimeStamp.class).orderBy("timestamp"));
+			return dbt.getTimeStamp();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

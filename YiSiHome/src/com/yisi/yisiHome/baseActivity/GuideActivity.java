@@ -1,22 +1,14 @@
 package com.yisi.yisiHome.baseActivity;
 
 import java.util.ArrayList;
-
-import com.hyq.dbUtils.DBManager;
-import com.yisi.yisiHome.R;
-import com.yisi.yisiHome.baseEntity.EntityUser;
-import com.yisi.yisiHome.baseServer.UserServer;
-import com.yisi.yisiHome.entity.EntityICCard;
-import com.yisi.yisiHome.utils.AESHelper;
-import com.yisi.yisiHome.utils.Constants;
-import com.yisi.yisiHome.utils.NetUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
@@ -27,6 +19,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.exception.DbException;
+import com.yisi.yisiHome.R;
+import com.yisi.yisiHome.baseEntity.EntityUser;
+import com.yisi.yisiHome.baseServer.DataBaseUpdateServer;
+import com.yisi.yisiHome.entity.EntityICCard;
+import com.yisi.yisiHome.utils.AESHelper;
+import com.yisi.yisiHome.utils.Constants;
 
 @SuppressLint("HandlerLeak")
 public class GuideActivity extends Activity {
@@ -52,38 +53,59 @@ public class GuideActivity extends Activity {
 	}
 
 	private void initData() {
-		DBManager<EntityUser> dbm=new DBManager<EntityUser>(this);
-		dbm.createTables(EntityUser.class,EntityICCard.class);
-		UserServer userServer=new UserServer(this);
-		userServer.saveUser(new EntityUser(0, "15034010946", AESHelper.encrypt("hyq"),Constants.ADD_OR_UPDATE,System.currentTimeMillis()));
-		if(NetUtils.getConnectedType(this)>0){//有网
-			update();
-		}else{
-			
+		DbUtils utils=DbUtils.create(this);
+		EntityUser user=new EntityUser(0, "15034010946", AESHelper.encrypt("hyq"),Constants.ADD_OR_UPDATE,System.currentTimeMillis());
+		try {
+			utils.save(user);
+			System.out.println(utils.findAll(EntityUser.class).get(0).getName());
+		} catch (DbException e) {
+			e.printStackTrace();
 		}
+//		DBManager<EntityUser> dbm=new DBManager<EntityUser>(this);
+//		try {
+//			dbm.createTables(EntityUser.class,EntityICCard.class,DBTimeStamp.class);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(-1);
+//		}
+//		UserServer userServer=new UserServer(this);
+//		userServer.saveUser(new EntityUser(0, "15034010946", AESHelper.encrypt("hyq"),Constants.ADD_OR_UPDATE,System.currentTimeMillis()));
+//		update();
+//		if(NetUtils.getConnectedType(this)>0){//有网
+//			update();
+//		}else{
+//			
+//		}
 	}
 
 	private void update() {
-		AsyncTask<Void, Void, String> task=new AsyncTask<Void, Void, String>(){
-			@Override
-			protected void onPreExecute() {
-				isUpdating=true;
-				super.onPreExecute();
-			}
-			@Override
-			protected String doInBackground(Void... params) {
-//				new UserServer(GuideActivity.this).upDateUser();
-//				new ICCardServer(GuideActivity.this).update();
-				return null;
-			}
-			@Override
-			protected void onPostExecute(String result) {
-				isUpdating=false;
-				super.onPostExecute(result);
-			}
-			
-		};
-		task.execute();
+		DataBaseUpdateServer dbUpdateServer=new DataBaseUpdateServer();
+		
+		Map<String, Class> classMap=new HashMap<String, Class>();
+		classMap.put(EntityICCard.class.getSimpleName(), EntityICCard.class);
+		Map<String, String> urls=new HashMap<String, String>();
+		urls.put(EntityICCard.class.getSimpleName(), Constants.URL_CRASH_SEND);
+		dbUpdateServer.update(this, classMap, urls);
+//		AsyncTask<Void, Void, String> task=new AsyncTask<Void, Void, String>(){
+//			@Override
+//			protected void onPreExecute() {
+//				isUpdating=true;
+//				super.onPreExecute();
+//			}
+//			@Override
+//			protected String doInBackground(Void... params) {
+////				new UserServer(GuideActivity.this).upDateUser();
+////				new ICCardServer(GuideActivity.this).update();
+//				return null;
+//			}
+//			@Override
+//			protected void onPostExecute(String result) {
+//				isUpdating=false;
+//				super.onPostExecute(result);
+//			}
+//			
+//		};
+//		task.execute();
 	}
 
 	private void initView() {

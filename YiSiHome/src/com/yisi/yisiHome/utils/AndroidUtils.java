@@ -44,7 +44,7 @@ public class AndroidUtils {
 	}
     /**the IMEI for GSM and the MEID or ESN for CDMA phones*/
     public static String getDeviceId(Context context){
-    	TelephonyManager tm=(TelephonyManager) context.getSystemService(Context.TELECOM_SERVICE);
+    	TelephonyManager tm=(TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     	return tm.getDeviceId();
     }
 

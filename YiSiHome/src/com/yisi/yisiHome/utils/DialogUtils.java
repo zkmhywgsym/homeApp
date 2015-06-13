@@ -23,6 +23,7 @@ public class DialogUtils {
 		
 		final Dialog dialog = new Dialog(context);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
 		Window win = dialog.getWindow();
 		LayoutParams lp=win.getAttributes();

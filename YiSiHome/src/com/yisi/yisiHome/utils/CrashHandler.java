@@ -15,8 +15,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.TreeSet;
 
-import org.apache.http.Header;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,8 +25,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.yisi.yisiHome.BuildConfig;
 import com.yisi.yisiHome.baseEntity.EntityCrash;
 
@@ -310,6 +312,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		return filesDir.list(filter);
 	}
 
+	int count=0;
 	private void postReport(final File file) {
 		// TODO 使用HTTP Post 发送错误报告到服务器
 		// 这里不再详述,开发者可以根据OPhoneSDN上的其他网络操作
@@ -317,30 +320,61 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		if (url==null||paramsName==null) {
 			return;
 		}
-		try {
-			RequestParams params=new RequestParams();
-			params.put(paramsName, file);
-			WebUtils.getInstance().doHttp(url, params, new TextHttpResponseHandler("utf-8") {
-				
-				@Override
-				public void onSuccess(int statue, Header[] paramArrayOfHeader,
-						String result) {
-					if (statue==200&&result!=null&&result.contains("true")) {
-						System.out.println("send success");
-						file.delete();
-					}else{
-						System.out.println("send false:"+statue);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				HttpUtils utils=new HttpUtils();
+				RequestParams params=new RequestParams();
+				params.addBodyParameter("crashFile", file);
+				params.addBodyParameter("test", "test string");
+				count++;
+				utils.send(HttpMethod.POST, Constants.URL_CRASH_SEND, params,new RequestCallBack<String>() {
+					
+					@Override
+					public void onFailure(HttpException arg0, String arg1) {
+						
 					}
-				}
-				
-				@Override
-				public void onFailure(int statue, Header[] paramArrayOfHeader,
-						String paramString, Throwable paramThrowable) {
-					System.out.println("send false:"+statue);
-				}
-			});
-		} catch (Exception e) {
-		}
+					
+					@Override
+					public void onSuccess(ResponseInfo<String> arg0) {
+						if (arg0.result.contains("false")) {
+							file.delete();
+						}
+					}
+				});
+//				try {
+//					utils.sendSync(HttpMethod.POST, Constants.URL_CRASH_SEND, params);
+//				} catch (HttpException e) {
+//					e.printStackTrace();
+//				}
+			}
+		}).run();
+//		try {
+//			RequestParams params=new RequestParams();
+//			params.put(paramsName, file);
+//			params.put("test", "test string");
+//			WebUtils.getInstance().doHttp(url, params, new TextHttpResponseHandler("utf-8") {
+//				
+//				@Override
+//				public void onSuccess(int statue, Header[] paramArrayOfHeader,
+//						String result) {
+//					if (statue==200&&result!=null&&result.contains("true")) {
+//						file.delete();
+//						Log.e(getClass().getSimpleName(), "日志提交成功，本地日志已删除");
+//					}else{
+//						Log.e(getClass().getSimpleName(), "日志提交失败：服务器报错"+statue);
+//					}
+//				}
+//				
+//				@Override
+//				public void onFailure(int statue, Header[] paramArrayOfHeader,
+//						String paramString, Throwable paramThrowable) {
+//					Log.e(getClass().getSimpleName(), "日志提交失败："+statue);
+//				}
+//			});
+//		} catch (Exception e) {
+//		}
 	}
 		
 }

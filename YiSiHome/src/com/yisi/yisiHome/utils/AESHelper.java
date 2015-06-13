@@ -16,7 +16,7 @@ public class AESHelper {
 	private static SecretKeySpec createKey() {
 		byte[] data = null;
 		StringBuffer sb = new StringBuffer(32);
-		sb.append(Constants.EMCRUPTION_KEY);
+		sb.append(Constants.ENCRUPTION_KEY);
 		while (sb.length() < 32) {
 			sb.append("0");
 		}
