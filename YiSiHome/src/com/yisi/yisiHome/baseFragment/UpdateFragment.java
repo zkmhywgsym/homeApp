@@ -127,7 +127,7 @@ public class UpdateFragment extends BaseFragment {
 		updateAlert = showDialog(new InitView() {
 			
 			@Override
-			public void init(Window win) {
+			public void init(Window win,Dialog dialog) {
 				content = (TextView) win.findViewById(R.id.content);
 				 title = (TextView) win.findViewById(R.id.title);
 				 content.setText(upDateContent);
@@ -160,7 +160,7 @@ public class UpdateFragment extends BaseFragment {
 		note = showDialog(new InitView() {
 
 			@Override
-			public void init(Window win) {
+			public void init(Window win,Dialog dialog) {
 				content = (TextView) win.findViewById(R.id.content);
 				 title = (TextView) win.findViewById(R.id.title);
 				 content.setText(upDateContent);

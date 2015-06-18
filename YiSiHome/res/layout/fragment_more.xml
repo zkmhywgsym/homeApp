@@ -43,11 +43,41 @@
                     android:stretchColumns="0" >
 
                     <TableRow
+                        android:id="@+id/per_info"
+                        android:layout_width="fill_parent"
+                        android:layout_marginLeft="2.0dip"
+                        android:layout_marginRight="2.0dip"
+                        android:background="@drawable/app_more_itemtop_press"
+                        android:onClick="onClick"
+                        android:paddingBottom="16.0dip"
+                        android:paddingTop="8.0dip" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:drawableLeft="@drawable/setting_mor"
+                            android:drawablePadding="10.0dip"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="17.0dip"
+                            android:textColor="#ff333333"
+                            android:text="个人信息"
+                            android:textSize="16.0sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_gravity="right"
+                            android:gravity="center_vertical"
+                            android:paddingRight="20.0dip"
+                            android:src="@drawable/ic_arrow" />
+                    </TableRow>
+                    <TableRow
                         android:id="@+id/sys_set"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
-                        android:background="@drawable/app_more_item_press"
+                        android:background="@drawable/app_more_itembottom_press"
                         android:onClick="onClick"
                         android:paddingBottom="16.0dip"
                         android:paddingTop="8.0dip" >

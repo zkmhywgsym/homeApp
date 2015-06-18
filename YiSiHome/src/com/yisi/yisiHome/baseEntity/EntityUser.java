@@ -1,77 +1,84 @@
 package com.yisi.yisiHome.baseEntity;
-
-import java.io.Serializable;
-
-import com.lidroid.xutils.db.annotation.Id;
-
-@SuppressWarnings("serial")
-public class EntityUser implements Serializable{
-	@Id
-	private int id;
-	private String name;
-	private String pwd;
-	private long timestamp;
-	private int type;//0 add or update;1 del
-	
-	public EntityUser() {}
-
-	public EntityUser(int id, String name, String pwd,int type,long timestamp) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.pwd = pwd;
-		this.type = type;
-		this.timestamp = timestamp;
-	}
-
-	public int getId() {
+//用户信息
+public class EntityUser {
+	private String id;
+	private String loginName;
+	private String carNum;
+	private String dearName;
+	private String realName;
+	private String userPwd;
+	private String createDate;
+	private String lastLoginTime;
+	private String phone;
+	private String identification;
+	private String email;
+	public String getId() {
 		return id;
 	}
-
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	
-	public long getTimestamp() {
-		return timestamp;
+	public String getDearName() {
+		return dearName;
 	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+	public void setDearName(String dearName) {
+		this.dearName = dearName;
 	}
-
-	@Override
-	public String toString() {
-		return "EntityUser [id=" + id + ", name=" + name + ", pwd=" + pwd
-				+ ", timestamp=" + timestamp + ", type=" + type + "]";
+	public String getRealName() {
+		return realName;
 	}
-
-	
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	public String getUserPwd() {
+		return userPwd;
+	}
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
+	public String getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+	public String getLastLoginTime() {
+		return lastLoginTime;
+	}
+	public void setLastLoginTime(String lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getIdentification() {
+		return identification;
+	}
+	public void setIdentification(String identification) {
+		this.identification = identification;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getLoginName() {
+		return loginName;
+	}
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+	public String getCarNum() {
+		return carNum;
+	}
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
+	}
 	
 	
 }

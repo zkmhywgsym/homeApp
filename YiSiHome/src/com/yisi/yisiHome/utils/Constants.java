@@ -4,6 +4,7 @@ public class Constants {
 	public static final String PHONE_REGULAR_EXPRESSION="^1[3|4|5|8][0-9]\\d{8}$";
 	public static final String ENCRUPTION_KEY = "com.yisi.yisiHome";
 	public static final String DATABASE_TIMESTAMP = "com.yisi.yisiHome.dbTimeStamp";
+	public static final String CAR_REGULAR_EXPRESSION="^[\\u4e00-\\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\\u4e00-\\u9fa5]$|^[a-zA-Z]{2}\\d{7}$ ";
 
 	public static final String HAS_INITED = "hasInited";
 	public static final String REQUEST_CODE="requestCode";
@@ -18,10 +19,11 @@ public class Constants {
 	public static final String DATE_TIME_TYPE_MINUTES="minutes";
 	public static final String DATE_TIME_TYPE_SECOND="second";
 	
-//	public static final String URL = "http://localhost:8080/WebUser";
-//	private static String URL="http://211.161.100.8:8080/androidService/";	
+//	public static String URL="http://211.161.100.8:8080/homeWeb/";	
 	public static String URL="http://192.168.1.2:8090/homeWeb/";	
 	public static final String URL_UPDATE_USER = URL+"";
+	public static final String URL_USER_INFO = URL+"base/getUserInfo.action";
+	public static final String URL_COMMIT_USER_INFO = URL+"base/setUserInfo.action";
 	public static final String URL_REGISTER_USER = URL+"base/userReg.action";
 	public static final String URL_RESET = URL+"base/userReset.action";
 	public static final String URL_LOGIN = URL+"base/userLogin.action";
@@ -33,6 +35,8 @@ public class Constants {
 	public static final String LOGIN_STATUS_SUCCESS="success";
 	public static final String LOGIN_STATUS_USERORPWD_ERR="userOnPwdErr";
 	public static final String LOGIN_STATUS_OTHER="other";
+	public static final String LOGIN_STATUS_STOP="stopped";
+	public static final String LOGIN_STATUS_WAIT="waiting";
 	public static final String LOGIN_ACCOUNT="loginAccount";
 	public static final String LOGIN_PWD="loginPwd";
 	public static final String LOGIN_REPWD="rememberPwd";

@@ -25,6 +25,9 @@ public class MoreFragment extends BaseFragment{
 	@Override
 	public void doClick(View view){
 		switch (view.getId()) {
+		case R.id.per_info:
+			mainActivity.otherBackableFragment(new PersonInfoFragment());
+			break;
 		case R.id.sys_set:
 			mainActivity.otherBackableFragment(new SysConfFragment());
 			break;

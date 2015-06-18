@@ -259,13 +259,6 @@ public class MainActivity extends FragmentActivity {
 		ft.commit();
 	}
 
-	// public void otherActivity(Activity activity) {
-	// findViewById(R.id.btn_titleLeftButton).setVisibility(View.GONE);
-	// fragmentManager.popBackStackImmediate();
-	// FragmentTransaction ft = fragmentManager.beginTransaction();
-	// ft.replace(android.R.id.tabcontent, activity);
-	// ft.commit();
-	// }
 
 	public void otherSwitchedFragment(BaseFragment fragment) {
 		switched = true;

@@ -1,14 +1,16 @@
 package com.yisi.yisiHome.baseServer;
 
+import java.util.List;
+
+import org.apache.http.client.CookieStore;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +18,13 @@ import android.widget.TextView;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.yisi.yisiHome.R;
-import com.yisi.yisiHome.baseActivity.LoginActivity;
 import com.yisi.yisiHome.baseActivity.MainActivity;
 import com.yisi.yisiHome.baseActivity.YisiApp;
 import com.yisi.yisiHome.baseEntity.EntityUser;
@@ -27,14 +34,6 @@ import com.yisi.yisiHome.utils.Constants;
 import com.yisi.yisiHome.utils.DialogUtils;
 import com.yisi.yisiHome.utils.MD5Utils;
 import com.yisi.yisiHome.utils.SMSUtils;
-import com.yisi.yisiHome.utils.WebHelper;
-import com.yisi.yisiHome.utils.DialogUtils.InitView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 public class LoginServer {
 	private Activity activity;
@@ -44,9 +43,11 @@ public class LoginServer {
 	private int flag = -1;
 	private EditText pwd;
 	private EditText pwdConfirm;
+	private HttpUtils hu;
 
 	public LoginServer(Activity activity) {
 		this.activity = activity;
+		hu = new HttpUtils();
 	}
 
 	public void login(String name, String pwd, boolean remember, boolean auto) {
@@ -55,7 +56,7 @@ public class LoginServer {
 		}
 		String pwdMd5 = MD5Utils.Md5(pwd);
 		if (loginLocal(name, pwdMd5)) {
-			loginSuccess(name,pwd,remember,auto);
+			loginSuccess(name, pwd, remember, auto);
 			return;
 		}
 		loginWeb(name.trim(), pwd, remember, auto);
@@ -69,7 +70,7 @@ public class LoginServer {
 		dialog = DialogUtils.getInstance().showDialog(activity,
 				DialogUtils.WRAP_CONTENT, DialogUtils.WRAP_CONTENT,
 				R.layout.frame_regist_layout, new DialogUtils.InitView() {
-					public void init(Window win) {
+					public void init(Window win,Dialog dialog) {
 						((TextView) win.findViewById(R.id.titleText))
 								.setText("用户注册");
 						checkCode = ((EditText) win
@@ -85,26 +86,22 @@ public class LoginServer {
 								.setOnClickListener(new MyClick());
 						confirmBtn.setOnClickListener(new MyClick());
 						confirmBtn.setText("注册用户");
-//						SMSUtils.getSMSmsg(activity, checkCode);
 						contacts.setText(AndroidUtils.getPhoneNum(activity));
 						contacts.setEnabled(true);
 						pwd.setEnabled(true);
-//						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-//						pwdConfirm
-//								.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 					}
 				});
 	}
 
 	public void resetPwd() {
-		if ((dialog != null) && (dialog.isShowing())){
+		if ((dialog != null) && (dialog.isShowing())) {
 			return;
 		}
 		flag = 1;
 		dialog = DialogUtils.getInstance().showDialog(activity,
 				DialogUtils.WRAP_CONTENT, DialogUtils.WRAP_CONTENT,
 				R.layout.frame_reset_pwd_layout, new DialogUtils.InitView() {
-					public void init(Window win) {
+					public void init(Window win,Dialog dialog) {
 						((TextView) win.findViewById(R.id.titleText))
 								.setText("重置密码");
 						checkCode = ((EditText) win
@@ -119,10 +116,8 @@ public class LoginServer {
 						win.findViewById(R.id.check_code_button)
 								.setOnClickListener(new MyClick());
 						confirmBtn.setOnClickListener(new MyClick());
-//						SMSUtils.getSMSmsg(activity, checkCode);
 						confirmBtn.setText("确认重置");
 						pwd.setEnabled(true);
-//						pwd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 						contacts.setEnabled(true);
 						contacts.setText(AndroidUtils.getPhoneNum(activity));
 					}
@@ -131,81 +126,90 @@ public class LoginServer {
 
 	// /*************************************************************
 	private void toRegist() {
-		final String deviceId=AndroidUtils
-				.getDeviceId(activity);
-		new AsyncTask<Void, Void, String>() {
-			protected void onPreExecute() {
-				YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
-				super.onPreExecute();
-			}
+		final String deviceId = AndroidUtils.getDeviceId(activity);
+		RequestParams params = new RequestParams();
+		YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
+		params.addBodyParameter("loginName", contacts.getText().toString());
+		params.addBodyParameter("loginPwd",
+				MD5Utils.Md5(pwd.getText().toString()));
+		params.addBodyParameter("device", deviceId);
+		params.addBodyParameter("checkCode", checkCode.getText().toString());
+		hu.send(HttpMethod.POST, Constants.URL_REGISTER_USER, params,
+				new RequestCallBack<String>() {
 
-			protected String doInBackground(Void... ps) {
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("loginName", contacts
-						.getText().toString()));
-				params.add(new BasicNameValuePair("loginPwd", MD5Utils
-						.Md5(pwd.getText().toString())));
-//				params.add(new BasicNameValuePair("device", deviceId));
-				return new WebHelper().getResult(Constants.URL_REGISTER_USER,
-						params);
-			}
-
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				YisiApp.disMissProgressDialog();
-				if (result!=null&&result.contains("true")) {
-					YisiApp.tell(activity, "注册成功");
-					flag = -1;
-					if (dialog != null) {
-						dialog.dismiss();
-						dialog = null;
+					@Override
+					public void onFailure(HttpException arg0, String arg1) {
+						YisiApp.disMissProgressDialog();
+						YisiApp.tell(activity, "注册失败");
 					}
-				} else if (result!=null&&result.contains("exists")) {
-					YisiApp.tell(activity, "注册名已存在");
-					contacts.requestFocus();
-				} else {
-					YisiApp.tell(activity, "注册失败");
-				}
-			}
 
-		}.execute();
+					@Override
+					public void onSuccess(ResponseInfo<String> arg0) {
+						YisiApp.disMissProgressDialog();
+						String result = arg0.result;
+						if (result != null) {
+							if (result.contains("true")) {
+								YisiApp.tell(activity, "注册成功,等待审核");
+								flag = -1;
+								if (dialog != null) {
+									dialog.dismiss();
+									dialog = null;
+								}
+							} else if (result != null
+									&& result.contains("exists")) {
+								YisiApp.tell(activity, "注册名已存在");
+								contacts.requestFocus();
+							} else if (result.contains("checkCodeErr")) {
+								YisiApp.tell(activity, "检验码无效");
+								checkCode.requestFocus();
+							}
+						} else {
+							YisiApp.tell(activity, "注册失败");
+						}
+					}
+
+				});
+
 	}
+
 	private void toResetPwd() {
-		new AsyncTask<Void, Void, String>() {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("loginPwd",
+				MD5Utils.Md5(pwd.getText().toString()));
+		params.addBodyParameter("loginName", contacts.getText().toString());
+		params.addBodyParameter("checkCode", checkCode.getText().toString());
+		YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
+		hu.send(HttpMethod.POST, Constants.URL_RESET, params,
+				new RequestCallBack<String>() {
 
-			@Override
-			protected String doInBackground(Void... params) {
-				WebHelper webHelper = new WebHelper(String.class);
-				List<NameValuePair> ps = new ArrayList<NameValuePair>();
-				ps.add(new BasicNameValuePair("loginPwd", MD5Utils.Md5(pwd
-						.getText().toString())));
-				ps.add(new BasicNameValuePair("loginName", contacts.getText()
-						.toString()));
-				return webHelper.getResult(Constants.URL_RESET, ps);
-			}
-
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				YisiApp.disMissProgressDialog();
-				if (result != null && result.contains("true")) {
-					flag = -1;
-					YisiApp.tell(activity, "重置成功");
-					if (dialog != null) {
-						dialog.dismiss();
-						dialog = null;
+					@Override
+					public void onFailure(HttpException arg0, String arg1) {
+						YisiApp.disMissProgressDialog();
+						YisiApp.tell(activity, "重置失败");
 					}
-				} else {
 
-					YisiApp.tell(activity, "重置失败");
-				}
-			}
+					@Override
+					public void onSuccess(ResponseInfo<String> arg0) {
+						YisiApp.disMissProgressDialog();
+						String result = arg0.result;
+						checkCode.requestFocus();
 
-			protected void onPreExecute() {
-				YisiApp.showProgressDialog(activity, "加载中……", "正在加载中……");
-				super.onPreExecute();
-			}
-
-		}.execute();
+						if (result != null) {
+							if (result.contains("true")) {
+								flag = -1;
+								YisiApp.tell(activity, "重置成功");
+								if (dialog != null) {
+									dialog.dismiss();
+									dialog = null;
+								}
+							} else if (result.contains("checkCodeErr")) {
+								YisiApp.tell(activity, "检验码无效");
+							} 
+						} else {
+							YisiApp.tell(activity, "重置失败");
+						}
+					}
+				});
 	}
 
 	private void getCheckCode() {
@@ -242,8 +246,10 @@ public class LoginServer {
 
 	private boolean loginLocal(String user, String pwd) {
 		try {
-			return new UserServer(activity).checkUser(new EntityUser(0, user,
-					pwd, 0, 0L));
+			EntityUser u = new EntityUser();
+			u.setLoginName(user);
+			u.setUserPwd(pwd);
+			return new UserServer(activity).checkUser(u);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -262,43 +268,63 @@ public class LoginServer {
 	private void loginWeb(final String user, final String pwd,
 			final boolean remember, final boolean auto) {
 		final String pwdMd5 = MD5Utils.Md5(pwd);
-		new AsyncTask<Void, Void, String>() {
-			protected void onPreExecute() {
-				YisiApp.showProgressDialog(activity, "登陆中……", "正在登陆中，请稍候……");
-				super.onPreExecute();
-			}
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("loginName", user);
+		params.addBodyParameter("loginPwd", pwdMd5);
+		YisiApp.showProgressDialog(activity, "登陆中……", "正在登陆中，请稍候……");
+		hu.send(HttpMethod.POST, Constants.URL_LOGIN, params,
+				new RequestCallBack<String>() {
 
-			protected String doInBackground(Void... ps) {
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("loginName", user));
-				params.add(new BasicNameValuePair("loginPwd", pwdMd5));
-				return new WebHelper().getResult(Constants.URL_LOGIN, params);
-			}
-
-			protected void onPostExecute(String result) {
-				YisiApp.disMissProgressDialog();
-				super.onPostExecute(result);
-				if ((result == null) || ("".equals(result.trim()))) {
-					YisiApp.tell(activity, "连接失败");
-				} else {
-
-					if (result.contains("success")){
-						loginSuccess(user, pwd, remember, auto);
+					@Override
+					public void onFailure(HttpException arg0, String arg1) {
+						YisiApp.disMissProgressDialog();
+						YisiApp.tell(activity, "连接失败");
 					}
-					else if (result.contains("other")) {
-						YisiApp.tell(activity, "未知错误");
-					} else {
-						YisiApp.tell(activity, "用户名/密码错误");
-					}
-				}
-			}
 
-		}.execute();
+					@Override
+					public void onSuccess(ResponseInfo<String> arg0) {
+						YisiApp.disMissProgressDialog();
+						String result = arg0.result;
+						saveSession(hu);
+						if (result != null) {
+							if (result.contains("success")) {
+								loginSuccess(user, pwd, remember, auto);
+							} else if (result.contains("other")) {
+								YisiApp.tell(activity, "未知错误");
+							} else if (result
+									.contains(Constants.LOGIN_STATUS_WAIT)) {
+								YisiApp.tell(activity, "正在审核");
+							} else if (result
+									.contains(Constants.LOGIN_STATUS_STOP)) {
+								YisiApp.tell(activity, "已停用");
+							} else {
+								YisiApp.tell(activity, "用户名/密码错误");
+							}
+						} else {
+							YisiApp.tell(activity, "连接失败");
+						}
+					}
+				});
+	}
+
+	private void saveSession(HttpUtils hu) {
+		DefaultHttpClient dh = (DefaultHttpClient) hu.getHttpClient();
+		CookieStore cs = dh.getCookieStore();
+		List<Cookie> cookies = cs.getCookies();
+		String aa = null;
+		for (int i = 0; i < cookies.size(); i++) {
+			if ("JSESSIONID".equals(cookies.get(i).getName())) {
+				aa = cookies.get(i).getValue();
+				YisiApp.saveSession(cs);
+				break;
+			}
+		}
+
 	}
 
 	private void saveValue(String name, String pwd, boolean remember,
 			boolean auto) {
-		YisiApp.setValue("rememberPwd", remember+"");
+		YisiApp.setValue("rememberPwd", remember + "");
 		YisiApp.setValue("autoLogin", auto + "");
 		if (auto) {
 			YisiApp.setValue("loginAccount", name.trim());
@@ -308,34 +334,6 @@ public class LoginServer {
 			YisiApp.setValue("loginPwd", "");
 		}
 	}
-
-	private void submitVerifyCode(final Runnable callBack) {
-		if (checkInfo(checkCode, pwd, pwdConfirm, contacts)) {
-			if (pwd.getText().toString()
-					.equals(pwdConfirm.getText().toString())) {
-				YisiApp.showProgressDialog(activity, "正在校验", "校验中……");
-				SMSUtils.submitVerifyCode(activity, contacts.getText()
-						.toString(), checkCode.getText().toString(),
-						new EventHandler() {
-							public void afterEvent(int event, int result,
-									Object data) {
-								super.afterEvent(event, result, data);
-								YisiApp.disMissProgressDialog();
-								if (result == SMSSDK.RESULT_COMPLETE) {
-									activity.runOnUiThread(callBack);
-								} else {
-									YisiApp.tell(activity, "验证码无效");
-								}
-							}
-						});
-			}
-		} else {
-			YisiApp.tell(activity, "密码不一致");
-			pwd.requestFocus();
-			return;
-		}
-	}
-
 
 	// 检测非空
 	private boolean checkInfo(EditText... evs) {
@@ -377,7 +375,16 @@ public class LoginServer {
 						}
 					};
 				}
-				submitVerifyCode(callBack);
+				if (checkInfo(checkCode, pwd, pwdConfirm, contacts)) {
+					if (pwd.getText().toString()
+							.equals(pwdConfirm.getText().toString())) {
+						callBack.run();
+					} else {
+						YisiApp.tell(activity, "密码不一致");
+						pwd.requestFocus();
+						return;
+					}
+				}
 				break;
 			default:
 				break;
@@ -385,10 +392,3 @@ public class LoginServer {
 		}
 	}
 }
-
-/*
- * Location:
- * C:\Users\Administrator.J8GC8MIFGGCYPIM\Desktop\反编译工具包\classes3_dex2jar.jar
- * Qualified Name: com.yisi.yisiHome.baseServer.LoginServer JD-Core
- * Version: 0.6.2
- */

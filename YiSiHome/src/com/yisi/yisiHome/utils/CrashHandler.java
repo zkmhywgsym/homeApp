@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -145,6 +146,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 				Looper.loop();
 			}
 		}.start();
+		ex.printStackTrace();
 		// 收集设备信息
 		collectCrashDeviceInfo(mContext);
 		// 保存错误报告文件
@@ -256,7 +258,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			}
 			FileWriter fw=new FileWriter(mContext.getFileStreamPath(fileName));
 //			fw.append(JSON.toJSONString(crashMsg));
-			fw.append(crashMsg.toString());
+			fw.append(JSON.toJSONString(crashMsg));
 //			fw.append(mDeviceCrashInfo.toString()+"\n error message>>>>>>>>>>>>>>>>>>>>>>\n"+result);
 //			fw.append(mDeviceCrashInfo.toString()+"\n error message>>>>>>>>>>>>>>>>>>>>>>\n"+getCrashReport(mContext, ex));
 			fw.flush();
@@ -338,7 +340,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 					
 					@Override
 					public void onSuccess(ResponseInfo<String> arg0) {
-						if (arg0.result.contains("false")) {
+						if (arg0.result.contains("true")) {
 							file.delete();
 						}
 					}

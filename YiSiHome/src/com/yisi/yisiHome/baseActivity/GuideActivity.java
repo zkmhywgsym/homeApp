@@ -54,13 +54,6 @@ public class GuideActivity extends Activity {
 
 	private void initData() {
 		DbUtils utils=DbUtils.create(this);
-		EntityUser user=new EntityUser(0, "15034010946", AESHelper.encrypt("hyq"),Constants.ADD_OR_UPDATE,System.currentTimeMillis());
-		try {
-			utils.save(user);
-			System.out.println(utils.findAll(EntityUser.class).get(0).getName());
-		} catch (DbException e) {
-			e.printStackTrace();
-		}
 //		DBManager<EntityUser> dbm=new DBManager<EntityUser>(this);
 //		try {
 //			dbm.createTables(EntityUser.class,EntityICCard.class,DBTimeStamp.class);

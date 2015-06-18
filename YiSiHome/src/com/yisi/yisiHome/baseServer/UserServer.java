@@ -30,21 +30,21 @@ public class UserServer {
 		EntityUser u=new EntityUser();
 		List<EntityUser> result=new ArrayList<EntityUser>();
 		try {
-			result = dbu.findAll(Selector.from(EntityUser.class).where("name", "=", user.getName()));
+			result = dbu.findAll(Selector.from(EntityUser.class).where("loginName", "=", user.getLoginName()));
 		} catch (DbException e) {
 			e.printStackTrace();
 		}
-		if (result.size()==0) {
+		if (result==null||result.size()==0) {
 			//TODO 联网登陆
 			return false;
 		}
 		u=result.get(0);
-		return u.getPwd().equals(MD5Utils.Md5(user.getPwd()));
+		return u.getUserPwd().equals(MD5Utils.Md5(user.getUserPwd()));
 	}
 	public boolean saveUser(EntityUser...entityUsers){
 		try {
 			for (EntityUser entityUser : entityUsers) {
-				entityUser.setPwd(MD5Utils.Md5(entityUser.getPwd()));
+				entityUser.setUserPwd(MD5Utils.Md5(entityUser.getUserPwd()));
 				dbu.saveOrUpdate(entityUser);
 			}
 			return true;
@@ -55,24 +55,25 @@ public class UserServer {
 		
 	}
 	public boolean upDateUser(){
-		try {
-			List<NameValuePair> params=new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("timestamp",getTimestamp()+""));
-			List<EntityUser> users=webHelper.getArray(Constants.URL_UPDATE_USER, params);
-			for (EntityUser entityUser : users) {
-				if(Constants.ADD_OR_UPDATE==entityUser.getType()){
-					dbu.saveOrUpdate(entityUser);
-				}else if(Constants.DELETE==entityUser.getType()){
-					entityUser.setId(0);
-					entityUser.setPwd("");
-					dbu.delete(entityUser);
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+//		try {
+//			List<NameValuePair> params=new ArrayList<NameValuePair>();
+//			params.add(new BasicNameValuePair("timestamp",getTimestamp()+""));
+//			List<EntityUser> users=webHelper.getArray(Constants.URL_UPDATE_USER, params);
+//			for (EntityUser entityUser : users) {
+//				if(Constants.ADD_OR_UPDATE==entityUser.getType()){
+//					dbu.saveOrUpdate(entityUser);
+//				}else if(Constants.DELETE==entityUser.getType()){
+//					entityUser.setId(0);
+//					entityUser.setPwd("");
+//					dbu.delete(entityUser);
+//				}
+//			}
+//			return true;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+		return false;
 	}
 	private long getTimestamp(){
 		try {
@@ -85,7 +86,7 @@ public class UserServer {
 	}
 	public boolean register(EntityUser user){
 		try {
-			user.setPwd(MD5Utils.Md5(user.getPwd()));
+			user.setUserPwd(MD5Utils.Md5(user.getUserPwd()));
 			List<NameValuePair> params=new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("user",JSON.toJSONString(user)));
 			String result=webHelper.getResult(Constants.URL_REGISTER_USER, params);

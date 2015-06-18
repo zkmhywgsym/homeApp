@@ -3,6 +3,8 @@ package com.yisi.yisiHome.baseActivity;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.client.CookieStore;
+
 import android.app.Activity;
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -22,6 +24,7 @@ public class YisiApp extends Application {
 	private static SharedPreferences sp;
 	private static ProgressDialog progress;
 	public static Map<String, Object> temp = new HashMap<String, Object>();
+	private static CookieStore session;
 
 	@Override
 	public void onCreate() {
@@ -115,5 +118,11 @@ public class YisiApp extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static CookieStore getSession(){
+		return session;
+	}
+	public static void saveSession(CookieStore cs) {
+		session=cs;
 	}
 }
